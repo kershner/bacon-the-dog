@@ -18,12 +18,12 @@ S3_BASE_URL = 'https://s3.us-east-2.amazonaws.com'
 def index():
     bucket_name = 'baconthedog'
     bucket = s3.Bucket(bucket_name)
-    hero_key = 'waves.mp4'
+    hero_key = 'bacon-hero-vid.webm'
 
     image_urls = []
     objects = bucket.objects.all()
     for item in objects:
-        if not item.key.endswith('.mp4'):
+        if not item.key.endswith('.webm'):
             s3_url = '%s/%s/%s' % (S3_BASE_URL, bucket_name, item.key)
             image_urls.append(s3_url)
 

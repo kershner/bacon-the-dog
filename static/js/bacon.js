@@ -66,7 +66,7 @@ function getImages(firstRun) {
 function videInit() {
     var heroUrl = bacon.config.s3BaseUrl + '/' + bacon.config.bucketName + '/' + bacon.config.heroVideoKey;
     $('.vide').vide({
-        mp4 : heroUrl
+        webm : heroUrl
     })
 }
 
