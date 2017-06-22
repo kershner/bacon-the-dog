@@ -1,7 +1,8 @@
 from flask import Flask, render_template
 from config import credentials
+from random import shuffle
 import boto3
-import webbrowser
+import json
 
 app = Flask(__name__)
 s3 = boto3.resource(
@@ -15,16 +16,22 @@ S3_BASE_URL = 'https://s3.us-east-2.amazonaws.com'
 
 @app.route('/')
 def index():
-    bucket = s3.Bucket('baconthedog')
+    bucket_name = 'baconthedog'
+    bucket = s3.Bucket(bucket_name)
+    hero_key = 'waves.mp4'
+
+    image_urls = []
     objects = bucket.objects.all()
     for item in objects:
-        s3_url = '%s/%s/%s' % (S3_BASE_URL, item.bucket_name, item.key)
-        print(s3_url)
-        # webbrowser.open(s3_url)
+        s3_url = '%s/%s/%s' % (S3_BASE_URL, bucket_name, item.key)
+        image_urls.append(s3_url)
 
-    msg = 'HELLO WORLD'
+    shuffle(image_urls)
     return render_template('home.html',
-                           msg=msg)
+                           hero_key=hero_key,
+                           image_urls=json.dumps(image_urls),
+                           bucket_name=bucket_name,
+                           s3_base_url=S3_BASE_URL)
 
 
 # Development server

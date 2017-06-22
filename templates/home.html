@@ -1,10 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Bacon the Dog</title>
+    <link rel="icon" type="image/png" href="/static/images/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Our best friend, Bacon</title>
+
+    <!-- CSS -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main.css"/>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Archivo+Black|Tenor+Sans|Open+Sans" rel="stylesheet">
 </head>
+
 <body>
-<h1>{{ msg }}</h1>
+    <div class="site-wrapper">
+        <div class="vide-wrapper">
+            <div class="vide"></div>
+
+            <div class="hero-text-wrapper">
+                <div class="huge-bacon-name archivo">BACON</div>
+                <div class="smaller-text tenor">was our friend for ten years</div>
+                <div class="even-smaller-text tenor bold">Please enjoy his memory</div>
+                <div class="even-smaller-text lifetime tenor">2007-2017</div>
+            </div>
+
+            <div class="send-photo-wrapper open-sans">
+                <p>Did you know Bacon?  Have a photo of him you don't see here?</p>
+                <p class="smallest-text">I'd love to <a href="#">hear from you</a>!</p>
+            </div>
+        </div>
+
+        <div class="images-wrapper">
+            <div class="img"><img src="#"></div>
+        </div>
+
+        <div class="load-more-btn tenor">Load More</div>
+    </div>
+
+    <!-- JavaScripts -->
+    <script type="text/javascript" src="/static/js/vendor/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/vendor/vide.min.js"></script>
+    <script type="text/javascript" src="/static/js/vendor/masonry.pkgd.min.js"></script>
+    <script type="text/javascript" src="/static/js/vendor/imagesloaded.pkgd.min.js"></script>
+    <script type="text/javascript" src="/static/js/bacon.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            bacon.config.bucketName = '{{ bucket_name }}';
+            bacon.config.s3BaseUrl = '{{ s3_base_url }}';
+            bacon.config.imageUrls = {{ image_urls|safe }};
+            bacon.config.heroVideoKey = '{{ hero_key}}';
+            bacon.init();
+        });
+    </script>
 </body>
 </html>
