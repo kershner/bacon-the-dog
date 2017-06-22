@@ -18,6 +18,9 @@ body {
 .bold {
     font-weight: bold;
 }
+.hidden {
+    display: none;
+}
 .archivo {
     font-family: 'Archivo Black', sans-serif;
 }

@@ -49,7 +49,7 @@ function loadMore() {
 
 function getImages(firstRun) {
     var numImages = bacon.config.imagesWrapper.find('.img').length,
-        start = numImages - 1 < 0 ? 0 : numImages + 1,
+        start = numImages - 1 < 0 ? 0 : numImages,
         end = (start + bacon.config.step),
         tmpImagesArray = bacon.config.imageUrls.slice(start, end),
         html = '';
@@ -102,7 +102,11 @@ $.fn.isotopeImagesReveal = function($items, firstRun) {
         var numImages = bacon.config.imagesWrapper.find('.img').length,
             totalImages = bacon.config.imageUrls.length;
 
-        if (numImages === totalImages - 1) {
+        console.log('Num Images: ' + numImages);
+        console.log('Total Images: ' + totalImages);
+
+        if (numImages === totalImages) {
+            console.log('HAIYOO');
             $('.load-more-btn').addClass('hidden');
         }
     });
