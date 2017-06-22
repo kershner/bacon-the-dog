@@ -23,8 +23,9 @@ def index():
     image_urls = []
     objects = bucket.objects.all()
     for item in objects:
-        s3_url = '%s/%s/%s' % (S3_BASE_URL, bucket_name, item.key)
-        image_urls.append(s3_url)
+        if not item.key.endswith('.mp4'):
+            s3_url = '%s/%s/%s' % (S3_BASE_URL, bucket_name, item.key)
+            image_urls.append(s3_url)
 
     shuffle(image_urls)
     return render_template('home.html',

@@ -10,8 +10,19 @@ bacon.config = {
 };
 
 bacon.init = function() {
+    // Isotope.js init
+    bacon.config.imagesWrapper.isotope({
+        itemSelector    : '.img',
+        stagger         : '0.1s',
+        initLayout      : true,
+        masonry         : {
+            isFitWidth  : true,
+            gutter      : 5
+        }
+    });
+
     videInit();
-    getImages();
+    getImages(1);
     loadMore();
 };
 
@@ -21,41 +32,20 @@ function loadMore() {
     });
 }
 
-function getImages() {
+function getImages(firstRun) {
     var numImages = bacon.config.imagesWrapper.find('.img').length,
-        index = numImages - 1 < 0 ? 0 : numImages - 1,
-        tmpImagesArray = bacon.config.imageUrls.slice(index, index + bacon.config.step);
+        start = numImages - 1 < 0 ? 0 : numImages + 1,
+        end = (start + bacon.config.step),
+        tmpImagesArray = bacon.config.imageUrls.slice(start, end),
+        html = '';
 
-    console.log('Current Number of Images: ' + numImages);
-    console.log('Current Start Index: ' + index);
-    console.log('Current End Index: ' + index + bacon.config.step);
     for (var i=0; i<tmpImagesArray.length; i++) {
-        var imageUrl = tmpImagesArray[i],
-            lastPeriod = imageUrl.lastIndexOf('.') + 1,
-            extension = imageUrl.slice(lastPeriod, imageUrl.length);
-
-        if (extension !== 'mp4') {
-            var html = '<div class="img"><img src="' + imageUrl + '"></div>';
-            bacon.config.imagesWrapper.append(html);
-        }
+        var imageUrl = tmpImagesArray[i];
+        html += '<div class="img"><img src="' + imageUrl + '"></div>';
     }
 
-    bacon.config.imagesWrapper.imagesLoaded(function() {
-        // Destroy/re-init isotope grid if necessary
-        if (bacon.config.imagesWrapper.data('isotope')) {
-            bacon.config.imagesWrapper.isotope('destroy');
-        }
-
-        bacon.config.imagesWrapper.isotope({
-            itemSelector    : '.img',
-            masonry         : {
-                isFitWidth  : true,
-                gutter      : 5
-            }
-        });
-    });
-
-    return false;
+    var jQueryHtml = $(html);
+    bacon.config.imagesWrapper.isotopeImagesReveal(jQueryHtml, firstRun);
 }
 
 function videInit() {
@@ -64,3 +54,43 @@ function videInit() {
         mp4 : heroUrl
     })
 }
+
+// Isotope ImageReveal
+// https://codepen.io/desandro/pen/bsHix
+$.fn.isotopeImagesReveal = function($items, firstRun) {
+    var iso = this.data('isotope'),
+        itemSelector = iso.options.itemSelector,
+        initial = firstRun ? 1 : 0;
+
+    // hide by default
+    $items.hide();
+
+    // append to container
+    this.append($items);
+
+    $items.imagesLoaded().progress(function(imgLoad, image) {
+        // get item
+        // image is imagesLoaded class, not <img>, <img> is image.img
+        var $item = $(image.img).parents(itemSelector);
+
+        // un-hide item
+        $item.show();
+
+        // isotope does its thing
+        iso.appended($item);
+
+         if (initial) {
+            bacon.config.imagesWrapper.isotope('layout');
+        }
+
+        // Recalculate number of images
+        var numImages = bacon.config.imagesWrapper.find('.img').length,
+            totalImages = bacon.config.imageUrls.length;
+
+        if (numImages === totalImages - 1) {
+            $('.load-more-btn').addClass('hidden');
+        }
+    });
+
+    return this;
+};
