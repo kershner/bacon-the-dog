@@ -21,10 +21,25 @@ bacon.init = function() {
         }
     });
 
+    var color = randomColor();
+    $('body').css({
+        'background-color'  : color
+    });
+
+    backgroundColorChange();
     videInit();
     getImages(1);
     loadMore();
 };
+
+function backgroundColorChange() {
+    setInterval(function () {
+        var color = randomColor();
+        $('body').css({
+            'background-color'  : color
+        });
+    }, 3000);
+}
 
 function loadMore() {
     $('.load-more-btn').on('click', function() {
