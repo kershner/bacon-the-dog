@@ -4,16 +4,12 @@ bacon.config = {
     s3BaseUrl       : '',
     heroVideoKey    : '',
     bucketName      : '',
-    wrapper         : $('.images-wrapper'),
+    imagesWrapper   : $('.images-wrapper'),
     step            : 15,
     imageUrls       : []
 };
 
 bacon.init = function() {
-    bacon.config.wrapper.masonry({
-        'isFitWidth'    : true
-    });
-
     videInit();
     getImages();
     loadMore();
@@ -26,10 +22,13 @@ function loadMore() {
 }
 
 function getImages() {
-    var numImages = bacon.config.wrapper.find('.img').length,
+    var numImages = bacon.config.imagesWrapper.find('.img').length,
         index = numImages - 1 < 0 ? 0 : numImages - 1,
         tmpImagesArray = bacon.config.imageUrls.slice(index, index + bacon.config.step);
 
+    console.log('Current Number of Images: ' + numImages);
+    console.log('Current Start Index: ' + index);
+    console.log('Current End Index: ' + index + bacon.config.step);
     for (var i=0; i<tmpImagesArray.length; i++) {
         var imageUrl = tmpImagesArray[i],
             lastPeriod = imageUrl.lastIndexOf('.') + 1,
@@ -37,11 +36,26 @@ function getImages() {
 
         if (extension !== 'mp4') {
             var html = '<div class="img"><img src="' + imageUrl + '"></div>';
-            bacon.config.wrapper.append(html);
+            bacon.config.imagesWrapper.append(html);
         }
     }
 
-    bacon.config.wrapper.masonry('layout');
+    bacon.config.imagesWrapper.imagesLoaded(function() {
+        // Destroy/re-init isotope grid if necessary
+        if (bacon.config.imagesWrapper.data('isotope')) {
+            bacon.config.imagesWrapper.isotope('destroy');
+        }
+
+        bacon.config.imagesWrapper.isotope({
+            itemSelector    : '.img',
+            masonry         : {
+                isFitWidth  : true,
+                gutter      : 5
+            }
+        });
+    });
+
+    return false;
 }
 
 function videInit() {
