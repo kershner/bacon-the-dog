@@ -23,13 +23,6 @@ bacon.init = function() {
         }
     });
 
-    var color = randomColor({
-        luminosity  : 'light'
-    });
-    $('body').css({
-        'background-color'  : color
-    });
-
     backgroundColorChange();
     getImages(1);
     loadMore();
@@ -69,8 +62,15 @@ function videInit() {
 }
 
 function backgroundColorChange() {
+    var color = randomColor({
+        luminosity  : 'light'
+    });
+    $('body').css({
+        'background-color'  : color
+    });
+
     setInterval(function () {
-        var color = randomColor({
+        color = randomColor({
             luminosity  : 'light'
         });
         $('body').css({
