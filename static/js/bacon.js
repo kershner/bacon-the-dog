@@ -23,7 +23,7 @@ bacon.init = function() {
         }
     });
 
-    backgroundColorChange();
+    changeColorsInit();
     getImages(1);
     loadMore();
 };
@@ -61,22 +61,24 @@ function videInit() {
     })
 }
 
-function backgroundColorChange() {
+function changeColorsInit() {
+    changeColors();
+    setInterval(function () {
+        changeColors();
+    }, 6000);
+}
+
+function changeColors() {
     var color = randomColor({
         luminosity  : 'light'
     });
     $('body').css({
         'background-color'  : color
     });
-
-    setInterval(function () {
-        color = randomColor({
-            luminosity  : 'light'
-        });
-        $('body').css({
-            'background-color'  : color
-        });
-    }, 6000);
+    color = randomColor();
+    $('.load-more-btn').css({
+        'background-color'  : color
+    });
 }
 
 function getImages(firstRun) {
