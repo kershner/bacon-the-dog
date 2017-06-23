@@ -10,41 +10,73 @@ bacon.config = {
 };
 
 bacon.init = function() {
+    baconNameColors();
+    videInit();
+
     // Isotope.js init
     bacon.config.imagesWrapper.isotope({
         itemSelector    : '.img',
-        stagger         : '0.1s',
         initLayout      : true,
         masonry         : {
             isFitWidth  : true,
-            gutter      : 5
+            columnWidth : 10
         }
     });
 
-    var color = randomColor();
+    var color = randomColor({
+        luminosity  : 'light'
+    });
     $('body').css({
         'background-color'  : color
     });
 
     backgroundColorChange();
-    videInit();
     getImages(1);
     loadMore();
 };
 
+function baconNameColors() {
+    var element = $('.huge-bacon-name'),
+        text = element.text(),
+        finalHtml = '',
+        tempHtml = '';
+
+    for (var i=0; i<text.length; i++) {
+        tempHtml = '<span class="colorwave animate-color" style="position: relative;">' + text[i] + '</span>';
+        finalHtml += tempHtml;
+    }
+    $(element).empty().append(finalHtml);
+
+    colorLetters();
+    setInterval(function() {
+        colorLetters();
+    }, 4000);
+}
+
+function colorLetters() {
+    $('.colorwave').each(function() {
+        $(this).css({
+            color   : randomColor()
+        });
+    });
+}
+
+function videInit() {
+    var heroUrl = bacon.config.s3BaseUrl + '/' + bacon.config.bucketName + '/' + bacon.config.heroVideoKey;
+    $('.vide').vide({
+        webm : heroUrl
+    })
+}
+
 function backgroundColorChange() {
     setInterval(function () {
-        var color = randomColor();
+        var color = randomColor({
+            luminosity  : 'light'
+        });
         $('body').css({
             'background-color'  : color
         });
-    }, 3000);
-}
-
-function loadMore() {
-    $('.load-more-btn').on('click', function() {
-        getImages();
-    });
+    }, 6000);
 }
 
 function getImages(firstRun) {
@@ -56,18 +88,17 @@ function getImages(firstRun) {
 
     for (var i=0; i<tmpImagesArray.length; i++) {
         var imageUrl = tmpImagesArray[i];
-        html += '<div class="img"><img src="' + imageUrl + '"></div>';
+        html += '<a href="' + imageUrl + '" target="_blank" class="img"><img src="' + imageUrl + '"></a>';
     }
 
     var jQueryHtml = $(html);
     bacon.config.imagesWrapper.isotopeImagesReveal(jQueryHtml, firstRun);
 }
 
-function videInit() {
-    var heroUrl = bacon.config.s3BaseUrl + '/' + bacon.config.bucketName + '/' + bacon.config.heroVideoKey;
-    $('.vide').vide({
-        webm : heroUrl
-    })
+function loadMore() {
+    $('.load-more-btn').on('click', function() {
+        getImages();
+    });
 }
 
 // Isotope ImageReveal
@@ -101,9 +132,6 @@ $.fn.isotopeImagesReveal = function($items, firstRun) {
         // Recalculate number of images
         var numImages = bacon.config.imagesWrapper.find('.img').length,
             totalImages = bacon.config.imageUrls.length;
-
-        console.log('Num Images: ' + numImages);
-        console.log('Total Images: ' + totalImages);
 
         if (numImages === totalImages) {
             console.log('HAIYOO');

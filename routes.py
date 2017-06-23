@@ -23,7 +23,7 @@ def index():
     image_urls = []
     objects = bucket.objects.all()
     for item in objects:
-        if not item.key.endswith('.webm'):
+        if 'hero-vid' not in item.key:
             s3_url = '%s/%s/%s' % (S3_BASE_URL, bucket_name, item.key)
             image_urls.append(s3_url)
 
