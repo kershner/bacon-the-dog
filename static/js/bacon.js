@@ -101,6 +101,7 @@ function getImages(firstRun) {
 function infiniteScroll() {
     $(window).on('scroll', function() {
         if ($(window).scrollTop() + $(window).height() >= $(document).height()){
+            bacon.config.loader.removeClass('hidden');
             getImages();
         }
     });
@@ -113,8 +114,6 @@ $.fn.isotopeImagesReveal = function($items, firstRun) {
         itemSelector = iso.options.itemSelector,
         initial = firstRun ? 1 : 0;
 
-    bacon.config.loader.removeClass('hidden');
-
     // hide by default
     $items.hide();
 
@@ -122,6 +121,8 @@ $.fn.isotopeImagesReveal = function($items, firstRun) {
     this.append($items);
 
     $items.imagesLoaded().progress(function(imgLoad, image) {
+        bacon.config.loader.addClass('hidden');
+
         // get item
         // image is imagesLoaded class, not <img>, <img> is image.img
         var $item = $(image.img).parents(itemSelector);
