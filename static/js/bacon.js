@@ -5,6 +5,7 @@ bacon.config = {
     heroVideoKey    : '',
     bucketName      : '',
     imagesWrapper   : $('.images-wrapper'),
+    loader          : $('.loader'),
     step            : 15,
     imageUrls       : []
 };
@@ -25,7 +26,7 @@ bacon.init = function() {
 
     changeColorsInit();
     getImages(1);
-    loadMore();
+    infiniteScroll();
 };
 
 function baconNameColors() {
@@ -97,9 +98,11 @@ function getImages(firstRun) {
     bacon.config.imagesWrapper.isotopeImagesReveal(jQueryHtml, firstRun);
 }
 
-function loadMore() {
-    $('.load-more-btn').on('click', function() {
-        getImages();
+function infiniteScroll() {
+    $(window).on('scroll', function() {
+        if ($(window).scrollTop() + $(window).height() >= $(document).height()){
+            getImages();
+        }
     });
 }
 
@@ -109,6 +112,8 @@ $.fn.isotopeImagesReveal = function($items, firstRun) {
     var iso = this.data('isotope'),
         itemSelector = iso.options.itemSelector,
         initial = firstRun ? 1 : 0;
+
+    bacon.config.loader.removeClass('hidden');
 
     // hide by default
     $items.hide();
@@ -130,16 +135,15 @@ $.fn.isotopeImagesReveal = function($items, firstRun) {
          if (initial) {
             bacon.config.imagesWrapper.isotope('layout');
         }
-
-        // Recalculate number of images
-        var numImages = bacon.config.imagesWrapper.find('.img').length,
-            totalImages = bacon.config.imageUrls.length;
-
-        if (numImages === totalImages) {
-            console.log('HAIYOO');
-            $('.load-more-btn').addClass('hidden');
-        }
     });
+
+    // Recalculate number of images
+    var numImages = bacon.config.imagesWrapper.find('.img').length,
+        totalImages = bacon.config.imageUrls.length;
+
+    if (numImages === totalImages) {
+        bacon.config.loader.addClass('hidden');
+    }
 
     return this;
 };
