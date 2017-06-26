@@ -143,6 +143,7 @@ $.fn.isotopeImagesReveal = function($items, firstRun) {
         totalImages = bacon.config.imageUrls.length;
 
     if (numImages === totalImages) {
+        $('.footer-links').removeClass('hidden');
         bacon.config.loader.addClass('hidden');
     }
 

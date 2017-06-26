@@ -19,6 +19,7 @@ def index():
     bucket_name = 'baconthedog'
     bucket = s3.Bucket(bucket_name)
     hero_key = 'bacon-hero-vid.webm'
+    first_photo = S3_BASE_URL + '/' + bucket_name + '/first_photo.jpg'
 
     image_urls = []
     objects = bucket.objects.all()
@@ -47,7 +48,8 @@ def index():
                            hero_key=hero_key,
                            image_urls=json.dumps(image_urls),
                            bucket_name=bucket_name,
-                           s3_base_url=S3_BASE_URL)
+                           s3_base_url=S3_BASE_URL,
+                           first_photo=first_photo)
 
 
 # Replace first page GIFs with next available non-GIFs for faster initial page load
