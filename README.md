@@ -1,8 +1,8 @@
 ![Bacon Just Chillin'](https://s3.us-east-2.amazonaws.com/baconthedog/DeliriousHatefulEkaltadeta.gif)
 
-Tribute/repository for photos of my late best friend, Bacon
+Tribute/photo repository for my late best friend, Bacon
 
-# http://www.baconthedog.online
+# http://www.kershner.org/bacon
 
 ### Built with Flask and JavaScript
 
