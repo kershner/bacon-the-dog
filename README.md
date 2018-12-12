@@ -2,7 +2,7 @@
 
 Tribute/photo repository for my late best friend, Bacon
 
-# http://www.kershner.org/bacon
+# http://old.kershner.org/bacon
 
 ### Built with Flask and JavaScript
 
